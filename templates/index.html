@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表情包</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for("static",filename='styles/style.css') }}">
+    <link rel="icon" href="{{ url_for("static",filename='styles/favicon.ico') }}">
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <form class="form-inline bqb">
+        <div class="form-group">
+            <label>表情包类型：</label>
+            <select class="form-control" name="im" id="im">
+                <option value=""></option>
+                {% for item in sel_list %}
+                    <option value="{{item}}">{{item}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>输入内容：</label>
+            <input class="form-control" name="content" type="text" id="content">
+        </div>
+            <input class="btn btn-primary" onclick="loadimg()" type="button" value="生成表情包" id="btn">
+        </form>
+    </div>
+
+    <div class="row bqb_img_div">
+        <div class="col-md-12">
+            <img class="img-responsive" id="bqb" src="{{url_for('static', filename='images/nb.png')}}">
+        </div>
+    </div>
+</div>
+
+
+<script type="application/javascript">
+function loadimg() {
+    var xmlhttp;
+    var im = document.getElementById('im').value;
+    var content = document.getElementById('content').value
+	if (window.XMLHttpRequest)
+	{
+		//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{
+		// IE6, IE5 浏览器执行代码
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	//响应事件
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		    //如果返回的值不为空执行
+		    if (xmlhttp.responseText){
+		        document.getElementById('bqb').src = '/static/Nimages/'+xmlhttp.responseText
+            }
+		}
+	}
+	//发送参数
+	xmlhttp.open("GET","/msg/?im="+im+'&content='+content,true);
+	xmlhttp.send();
+}
+</script>
+
+</body>
+</html>
